@@ -1,2 +1,2 @@
 # raster_fun
-Testing environment for awesome analysis in python
+Sandbox for working on imagery solutions for agriculture. 

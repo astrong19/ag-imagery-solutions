@@ -4,7 +4,9 @@ import sys
 import json
 import requests
 import time
-from os import environ
+import zipfile
+import os
+from tqdm import tqdm
 sys.path.append("..")
 from utilities import util
 
@@ -52,6 +54,24 @@ def clip_request(api_key, clip_payload):
             print("...Still waiting for clipping to complete...")
             time.sleep(1)
 
+    return clip_download_url
+
+def download_image(scene_id, clip_download_url):
+
+    # Download clip
+    response = requests.get(clip_download_url, stream=True)
+    with open('output/' + scene_id + '.zip', "wb") as handle:
+        for data in tqdm(response.iter_content()):
+            handle.write(data)
+
+    # Unzip file
+    ziped_item = zipfile.ZipFile('output/' + scene_id + '.zip')
+    ziped_item.extractall('output/' + scene_id)
+
+    # Delete zip file
+    os.remove('output/' + scene_id + '.zip')
+    print('Downloaded clips located in: output/')
+
 
 if __name__ == '__main__':
 
@@ -74,4 +94,6 @@ if __name__ == '__main__':
 
     clip_payload = define_payload(aoi, scene_id, item_type, asset_type)
 
-    clip_request(api_key, clip_payload)
+    clip_download_url = clip_request(api_key, clip_payload)
+
+    download_image(scene_id, clip_download_url)

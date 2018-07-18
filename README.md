@@ -1,2 +1,2 @@
-# raster_fun
-Sandbox for working on imagery solutions for agriculture. 
+# ag-imagery-solutions
+Sandbox for working on imagery solutions for agriculture.
